@@ -1,0 +1,131 @@
+<html lang="en">
+<head>
+{% block head %}
+<title>SuperApp{% block title %}{% endblock %}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="keywords" content="">
+<meta name="author" content="">
+<meta charset="utf-8">
+<link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel= "stylesheet" type= "text/css">
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+{% endblock %}
+</head>
+<body style="min-height: 2000px; padding-top: 70px;">
+<style type="text/css">
+b {
+font-weight: normal;
+color: #c00;
+}
+.rurl {
+color: green;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+}
+.dropdown-menu {
+max-height: 400px;
+max-width: 700px;
+overflow: hidden;
+overflow-y: auto;
+}
+</style>
+
+<div class="container-fluid">
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container-fluid">
+            <a class="brand" href="#">DSSMTuner</a>
+                <form action={{ url_for('search', q=query) }} method="get" class="navbar-form pull-left form-inline">
+            <ul class="nav">
+                    <li>
+                    <input type="text" class="span2" name="q" value={{ query }}>
+                    <button type="submit" class="btn">Search</button>
+                    </li>
+            </ul>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="row-fluid">
+    <!--
+        <div class="span2">
+            <ul class="nav nav-list affix">
+                <li class="nav-header">Good Query</li>
+                {% for query in query_list %}
+                <li><a href="/search?q={{query}}{% for feature in selected_feature_set %}&{{ feature }}=on{% endfor %}">{{ query }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    -->
+        <div class="span12">
+            {% for i in range(results_a | length) %}
+            <div class="row-fluid" id="result_row">
+                <div class="span6">
+                    <h4>
+                    <a href={{ results_a[i].url }}>{{ results_a[i].title | safe }}</a>
+                    </h4>
+                    <p>
+                    {{ results_a[i].content | safe }}
+                    </p>
+                    <p class="rurl">
+                    {{ results_a[i].url | safe }}
+                    </p>
+                    <p>
+                    {{ results_a[i].cosine_similarity | safe }}
+                    </p>
+                    {% for feature in selected_feature_set %}
+                    <p>
+                    {{ feature }} : {{ results_a[i][feature] }}
+                    </p>
+                    {% endfor %}
+                </div>
+                <div class="span6">
+                    <h4>
+                    <a href={{ results_b[i].url}}>{{ results_b[i].title | safe }}</a>
+                    </h4>
+                    <p>
+                    {{ results_b[i].content | safe }}
+                    </p>
+                    <p class="rurl">
+                    {{ results_b[i].url | safe }}
+                    </p>
+                    <p>
+                    {{ results_b[i].cosine_similarity | safe }}
+                    </p>
+                    {% for feature in selected_feature_set %}
+                    <p>
+                    {{ feature }} : <b> {{ results_b[i][feature] }} </b>
+                    </p>
+                    {% endfor %}
+
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    <!--
+        <div class="span4">
+            <div class="row-fluid" id="result_row">
+            <ul class="nav nav-list affix">
+            <form action={{ url_for('search', q=query) }} method="get">
+            <input type="text" name="q" value={{ query }} />
+            <input type="submit" value="Search"/>
+            {% for feature_name in feature_list %}
+            {% if feature_name in selected_feature_set %}
+            <br><input type="checkbox" name={{ feature_name }} checked="true" > {{ feature_name }}
+            {% else %}
+            <br><input type="checkbox" name={{ feature_name }}> {{ feature_name }}
+            {% endif %}
+            {% endfor %}
+            </form>
+            </ul>
+            </div>
+        <div>
+    -->
+    </div>
+</div>
+</body>
+</html>
+
